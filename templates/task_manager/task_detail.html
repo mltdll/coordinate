@@ -24,8 +24,18 @@
     </span>
   </h1>
   <h3 class="text-muted">
-    {{ task.task_type.name }}
+    {{ task.task_type.name }}, {{ task.get_priority_display }}
   </h3>
+  <p>Expires {{ task.deadline }}.</p>
+
+  <br>
+
+  <h3>Task description</h3>
+  <p>
+    {{ task.description }}
+  </p>
+
+  <br>
 
   {% if task.assignees.all %}
     <h3>
@@ -41,8 +51,6 @@
         <span class="font-weight-bold">First name: </span>{{ employee.first_name }}
         <br>
         <span class="font-weight-bold">Last name: </span>{{ employee.last_name }}
-        <br>
-        <span class="font-weight-bold">Email: </span>{{ employee.email }}
       </p>
       {% if forloop.last %}
         <hr>{% endif %}
