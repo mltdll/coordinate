@@ -129,15 +129,15 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        model = self.request.GET.get("model", "")
+        name = self.request.GET.get("name", "")
 
-        context["search_form"] = ByNameSearchForm(initial={"model": model})
+        context["search_form"] = ByNameSearchForm(initial={"name": name})
 
         return context
 
     def get_queryset(self):
-        if model := self.request.GET.get("model"):
-            return self.queryset.filter(model__icontains=model)
+        if name := self.request.GET.get("name"):
+            return self.queryset.filter(name__icontains=name)
 
         return self.queryset
 
