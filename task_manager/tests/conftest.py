@@ -105,7 +105,7 @@ def employee_client(client):
         password="zLjyFH7qd1icr33e",
         first_name="Client",
         last_name="Test",
-        position=Position(name="Test subject"),
+        position=Position.objects.create(name="Test subject"),
     )
     client.force_login(employee)
 
