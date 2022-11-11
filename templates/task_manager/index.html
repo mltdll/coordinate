@@ -47,7 +47,7 @@
         <p class="card-text">
           {% if outdated_tasks %}
             <strong>{{ outdated_tasks }}</strong>
-            task{{ outdated_tasks|pluralize }} are outdated but still incomplete!
+            task{{ outdated_tasks|pluralize }} {{ outdated_tasks|pluralize:"is,are" }} outdated but still incomplete!
           {% else %}
             There are no outdated tasks.
           {% endif %}
