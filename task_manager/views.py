@@ -24,7 +24,7 @@ def index(request):
 
     tasks = Task.objects.filter(is_completed=False)
     number_of_tasks = tasks.count()
-    urgent_tasks = tasks.filter(priority="Urgent").count()
+    urgent_tasks = tasks.filter(priority="UR").count()
     outdated_tasks = tasks.filter(deadline__lt=date.today()).count()
 
     context = {
