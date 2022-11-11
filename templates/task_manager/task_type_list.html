@@ -1,0 +1,51 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>
+    Task Types
+    <a href="{% url 'task_manager:task-type-create' %}" class="float-right btn btn-outline-primary">
+      <i class="bi bi-plus-square"></i> Create
+    </a>
+  </h1>
+
+  {% include "includes/search_form.html" %}
+
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if task_type_list %}
+        {% for task_type in task_type_list %}
+          <tr>
+            <td>{{ task_type.id }}</td>
+            <td>
+              {{ task_type.name }}
+
+              <span class="float-right">
+                <a href="{% url 'task_manager:task-type-update' pk=task_type.id %}" class="btn btn-outline-secondary btn-sm">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <a href="{% url 'task_manager:task-type-delete' pk=task_type.id %}" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-trash"></i>
+                </a>
+              </span>
+
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="2" class="text-muted">No types found</td>
+        </tr>
+      {% endif %}
+    </tbody>
+
+  </table>
+
+{% endblock %}
