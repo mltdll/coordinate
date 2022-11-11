@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.http import urlencode
 from pytest_django.asserts import assertRedirects, assertTemplateUsed
@@ -246,3 +247,90 @@ class TestPositionViews:
 
         assert list(response.context["position_list"]) == list(positions)
 
+
+class TestEmployeeViews:
+    @pytest.mark.django_db
+    def test_employee_list(self, employee_data, employee_client):
+        response = employee_client.get(reverse("task_manager:employee-list"))
+        employees = get_user_model().objects.all()
+
+        assert response.status_code == 200
+        assert list(response.context["employee_list"]) == list(employees)
+
+    @pytest.mark.django_db
+    def test_employee_detail(self, employee_data, employee_client):
+        employee_id = 1
+
+        response = employee_client.get(
+            reverse("task_manager:employee-detail", args=[employee_id])
+        )
+        employee = get_user_model().objects.get(pk=employee_id)
+
+        assert response.context_data["employee"] == employee
+
+    @pytest.mark.django_db
+    def test_employee_template(self, employee_client):
+        response = employee_client.get(reverse("task_manager:employee-list"))
+
+        assertTemplateUsed(response, "task_manager/employee_list.html")
+
+    @pytest.mark.django_db
+    def test_create_employee(self, employee_client):
+        form_data = {
+            "username": "test.user",
+            "password1": "zLjyFH7qd1icr33e",
+            "password2": "zLjyFH7qd1icr33e",
+            "first_name": "Test",
+            "last_name": "One",
+            "position": 1,
+        }
+
+        response = employee_client.post(
+            reverse("task_manager:employee-create"), data=form_data
+        )
+
+        employee = get_user_model().objects.get(username=form_data["username"])
+
+        assert response.status_code == 302
+        assert employee.position_id == form_data["position"]
+        assert employee.first_name == form_data["first_name"]
+        assert employee.last_name == form_data["last_name"]
+        assert employee.check_password(form_data["password1"])
+
+    @pytest.mark.django_db
+    def test_update_employee(
+        self, employee_data, employee_client, position_data
+    ):
+        form_data = {"position": 3}
+        employee_id = 1
+
+        response = employee_client.post(
+            reverse("task_manager:employee-update", args=[employee_id]),
+            data=form_data,
+        )
+
+        employee = get_user_model().objects.get(pk=employee_id)
+
+        assert response.status_code == 302
+        assert employee.position_id == form_data["position"]
+
+    @pytest.mark.django_db
+    def test_delete_employee(self, employee_client):
+        employee_id = 1
+
+        response = employee_client.post(
+            reverse("task_manager:employee-delete", args=[employee_id])
+        )
+
+        assert response.status_code == 302
+        assert not get_user_model().objects.filter(pk=employee_id).exists()
+
+    @pytest.mark.django_db
+    def test_search_employee(self, employee_client, employee_data):
+        # Probably not how you do it 2.
+        response = employee_client.get(
+            reverse("task_manager:employee-list") + "?username=one"
+        )
+        employees = get_user_model().objects.filter(username__icontains="one")
+
+        assert list(response.context["employee_list"]) == list(employees)
