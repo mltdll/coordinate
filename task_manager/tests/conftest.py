@@ -29,7 +29,7 @@ def position_data():
 def employee_data(position_data):
     data = [
         {
-            "username": "user_1",
+            "username": "user_one",
             "password": "zLjyFH7qd1icr33e",
             "first_name": "User",
             "last_name": "One",
