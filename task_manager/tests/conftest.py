@@ -67,7 +67,7 @@ def task_data(task_type_data, employee_data):
                 "priority": "Trivial",
                 "task_type_id": 1,
             },
-            1,
+            [1],
         ),
         (
             {
@@ -94,8 +94,8 @@ def task_data(task_type_data, employee_data):
     ]
 
     for task_data, employee_ids in data:
-        car = Task.objects.create(**task_data)
-        car.drivers.set(employee_ids)
+        task = Task.objects.create(**task_data)
+        task.assignees.set(employee_ids)
 
 
 @pytest.fixture

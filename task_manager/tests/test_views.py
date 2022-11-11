@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from pytest_django.asserts import assertRedirects, assertTemplateUsed
 
-from ..models import TaskType, Position
+from ..models import TaskType, Position, Task
 
 
 @pytest.mark.parametrize(
@@ -327,10 +327,133 @@ class TestEmployeeViews:
 
     @pytest.mark.django_db
     def test_search_employee(self, employee_client, employee_data):
-        # Probably not how you do it 2.
         response = employee_client.get(
             reverse("task_manager:employee-list") + "?username=one"
         )
         employees = get_user_model().objects.filter(username__icontains="one")
 
         assert list(response.context["employee_list"]) == list(employees)
+
+
+class TestTaskViews:
+    @pytest.mark.django_db
+    def test_task_list(self, task_data, employee_client):
+        response = employee_client.get(reverse("task_manager:task-list"))
+        tasks = Task.objects.all()
+
+        assert response.status_code == 200
+        assert list(response.context["task_list"]) == list(tasks)
+
+        assertTemplateUsed(response, "task_manager/task_list.html")
+
+    @pytest.mark.django_db
+    def test_task_detail(self, task_data, employee_client):
+        task_id = 1
+
+        response = employee_client.get(
+            reverse("task_manager:task-detail", args=[task_id])
+        )
+        task = Task.objects.get(pk=task_id)
+
+        assert response.context_data["task"] == task
+
+    @pytest.mark.django_db
+    def test_task_type_template(self, employee_client):
+        response = employee_client.get(reverse("task_manager:task-list"))
+
+        assertTemplateUsed(response, "task_manager/task_list.html")
+
+    @pytest.mark.django_db
+    def test_create_task(self, task_type_data, employee_data, employee_client):
+        form_data = {
+            "name": "Test Task 12",
+            "description": "description",
+            "deadline": "2022-11-12",
+            "is_completed": False,
+            "priority": "ME",
+            "task_type": 1,
+            "assignees": [1, 2],
+        }
+
+        response = employee_client.post(
+            reverse("task_manager:task-create"), data=form_data
+        )
+
+        assert response.status_code == 302
+
+        task = Task.objects.get(name=form_data["name"])
+
+        assert task.name == form_data["name"]
+        assert task.task_type.id == form_data["task_type"]
+        assert [employee.id for employee in task.assignees.all()] == form_data[
+            "assignees"
+        ]
+
+    @pytest.mark.django_db
+    def test_update_task(self, task_data, employee_client):
+        form_data = {
+            "name": "TT51",
+            "description": "description",
+            "deadline": "2322-01-04",
+            "is_completed": True,
+            "priority": "LO",
+            "task_type": 1,
+            "assignees": 2,
+        }
+        task_id = 1
+
+        response = employee_client.post(
+            reverse("task_manager:task-update", args=[task_id]), data=form_data
+        )
+
+        assert response.status_code == 302
+
+        task = Task.objects.get(pk=task_id)
+
+        assert task.name == form_data["name"]
+        assert task.task_type.id == form_data["task_type"]
+        assert task.assignees.get().id == form_data["assignees"]
+
+    @pytest.mark.django_db
+    def test_delete_task(self, task_data, employee_client):
+        task_id = 1
+
+        response = employee_client.post(
+            reverse("task_manager:task-delete", args=[task_id])
+        )
+
+        assert response.status_code == 302
+        assert not Task.objects.filter(pk=task_id).exists()
+
+    @pytest.mark.django_db
+    def test_search_tasks(self, task_data, employee_client):
+        response = employee_client.get(
+            reverse("task_manager:task-list") + "?name=fea"
+        )
+        tasks = Task.objects.filter(name__icontains="fea")
+
+        assert list(response.context["task_list"]) == list(tasks)
+
+    @pytest.mark.django_db
+    def test_assign_to_task(self, task_data, employee_client):
+        task_id = 1
+
+        response_add = employee_client.get(
+            reverse("task_manager:toggle-task-assign", args=[task_id])
+        )
+
+        task = Task.objects.prefetch_related("assignees").get(pk=task_id)
+        user = response_add.wsgi_request.user
+
+        assert response_add.status_code == 302
+        assert user in task.assignees.all()
+
+        # And now the other way, using the WET design principle.
+        response_remove = employee_client.get(
+            reverse("task_manager:toggle-task-assign", args=[task_id])
+        )
+
+        task.refresh_from_db()
+
+        assert response_remove.status_code == 302
+        assert user not in task.assignees.all()
