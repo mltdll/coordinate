@@ -10,3 +10,4 @@ pytest==7.2.0
 pytest-django==4.5.2
 dj-database-url==1.0.0
 psycopg2==2.9.5
+whitenoise==6.2.0
