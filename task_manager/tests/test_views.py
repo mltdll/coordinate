@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.http import urlencode
 from pytest_django.asserts import assertRedirects, assertTemplateUsed
 
-from ..models import TaskType
+from ..models import TaskType, Position
 
 
 @pytest.mark.parametrize(
@@ -114,7 +114,6 @@ def test_login_required(url, client):
     Test that all the private views redirect unauthenticated users with
     correct `next` parameter
     """
-
     response = client.get(url)
 
     assertRedirects(
@@ -184,3 +183,66 @@ class TestTaskTypeViews:
         task_types = TaskType.objects.filter(name__icontains="y")
 
         assert list(response.context["task_type_list"]) == list(task_types)
+
+
+class TestPositionViews:
+    @pytest.mark.django_db
+    def test_position_list(self, position_data, employee_client):
+        response = employee_client.get(reverse("task_manager:position-list"))
+        positions = Position.objects.all()
+
+        assert response.status_code == 200
+        assert list(response.context["position_list"]) == list(positions)
+
+    @pytest.mark.django_db
+    def test_position_template(self, employee_client):
+        response = employee_client.get(reverse("task_manager:position-list"))
+
+        assertTemplateUsed(response, "task_manager/position_list.html")
+
+    @pytest.mark.django_db
+    def test_create_position(self, employee_client):
+        form_data = {"name": "Test1"}
+
+        response = employee_client.post(
+            reverse("task_manager:position-create"), data=form_data
+        )
+
+        assert response.status_code == 302
+        assert Position.objects.filter(name=form_data["name"]).exists()
+
+    @pytest.mark.django_db
+    def test_update_position(self, employee_client, position_data):
+        form_data = {"name": "Extra task"}
+        entry_id = 1
+
+        response = employee_client.post(
+            reverse("task_manager:position-update", args=[entry_id]),
+            data=form_data,
+        )
+
+        position = Position.objects.get(pk=entry_id)
+
+        assert response.status_code == 302
+        assert position.name == form_data["name"]
+
+    @pytest.mark.django_db
+    def test_delete_position(self, employee_client, position_data):
+        entry_id = 3
+
+        response = employee_client.post(
+            reverse("task_manager:position-delete", args=[entry_id])
+        )
+
+        assert response.status_code == 302
+        assert not Position.objects.filter(pk=entry_id).exists()
+
+    @pytest.mark.django_db
+    def test_search_position(self, employee_client, position_data):
+        response = employee_client.get(
+            reverse("task_manager:position-list") + "?name=a"
+        )
+        positions = Position.objects.filter(name__icontains="a")
+
+        assert list(response.context["position_list"]) == list(positions)
+
