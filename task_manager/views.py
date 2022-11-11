@@ -18,12 +18,11 @@ from .forms import (
 
 @login_required
 def index(request):
-    num_employees = get_user_model().objects.count()
-    num_tasks = Task.objects.count()
-
     context = {
-        "num_employees": num_employees,
-        "num_tasks": num_tasks,
+        "num_employees": get_user_model().objects.count(),
+        "num_tasks": Task.objects.count(),
+        "num_task_types": TaskType.objects.count(),
+        "num_positions": Position.objects.count(),
     }
 
     return render(request, "task_manager/index.html", context=context)
