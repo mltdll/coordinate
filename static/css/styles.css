@@ -1,0 +1,17 @@
+.content {
+    padding: 20px 30px;
+    width: 50%;
+    min-height: 100vh;
+    background-color: white;
+    border: lightgray solid;
+    border-width: 0 1px;
+}
+
+.navbar-brand {
+    font-family: "serif";
+}
+
+.sidebar-nav {
+    position: sticky;
+    top: 20px
+}

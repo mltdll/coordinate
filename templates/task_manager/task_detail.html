@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    {{ task.name }}
+
+    <span class="float-right">
+      {% if user in task.assignees.all %}
+        <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-outline-danger">
+          <i class="bi bi-calendar-minus"></i> Abandon
+        </a>
+      {% else %}
+        <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-outline-success">
+          <i class="bi bi-calendar-check"></i> Take
+        </a>
+      {% endif %}
+
+      <a href="{% url 'task_manager:task-update' pk=task.id %}" class="btn btn-outline-secondary">
+        <i class="bi bi-pencil-square"></i> Update
+      </a>
+      <a href="{% url 'task_manager:task-delete' pk=task.id %}" class="btn btn-outline-danger">
+        <i class="bi bi-trash"></i> Delete
+      </a>
+    </span>
+  </h1>
+  <h3 class="text-muted">
+    {{ task.task_type.name }}
+  </h3>
+
+  {% if task.assignees.all %}
+    <h3>
+      Assignees:
+    </h3>
+
+    {% for employee in task.assignees.all %}
+      <hr>
+      <h5><a href="{% url 'task_manager:employee-detail' pk=employee.id %}">{{ employee.username }}</a></h5>
+      <p>
+        <span class="font-weight-bold">Position: </span>{{ employee.position }}
+        <br>
+        <span class="font-weight-bold">First name: </span>{{ employee.first_name }}
+        <br>
+        <span class="font-weight-bold">Last name: </span>{{ employee.last_name }}
+        <br>
+        <span class="font-weight-bold">Email: </span>{{ employee.email }}
+      </p>
+      {% if forloop.last %}
+        <hr>{% endif %}
+    {% endfor %}
+
+  {% else %}
+    <p class="text-muted">This task has no assignees.</p>
+  {% endif %}
+
+  <br>
+
+{% endblock %}
