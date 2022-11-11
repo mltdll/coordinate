@@ -56,7 +56,8 @@ from ..models import TaskType, Position, Task
         ),
         pytest.param(
             reverse("task_manager:task-list"),
-            id="Task list page should not be accessible for unauthorized users",
+            id="Task list page should not be "
+            "accessible for unauthorized users",
         ),
         pytest.param(
             reverse("task_manager:task-detail", args=[1]),
