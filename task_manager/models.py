@@ -55,4 +55,4 @@ class Task(models.Model):
     assignees = models.ManyToManyField(Employee, related_name="tasks")
 
     def __str__(self) -> str:
-        return f"[{self.priority}] {self.name}"
+        return f"{self.name}"

@@ -39,9 +39,8 @@ from ..models import Employee, Task, TaskType, Position
                 priority="Urgent",
                 task_type=TaskType(name="Chores"),
             ),
-            "[Urgent] Do dishes",
-            id="`str(Task)` should equal to "
-            "`f'{[Task.priority]} {Task.name}'`",
+            "Do dishes",
+            id="`str(Task)` should equal to `Task.name`",
         ),
     ],
 )
