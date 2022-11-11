@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -18,11 +20,18 @@ from .forms import (
 
 @login_required
 def index(request):
+    number_of_employees = get_user_model().objects.count()
+
+    tasks = Task.objects.filter(is_completed=False)
+    number_of_tasks = tasks.count()
+    urgent_tasks = tasks.filter(priority="Urgent").count()
+    outdated_tasks = tasks.filter(deadline__lt=date.today())
+
     context = {
-        "num_employees": get_user_model().objects.count(),
-        "num_tasks": Task.objects.count(),
-        "num_task_types": TaskType.objects.count(),
-        "num_positions": Position.objects.count(),
+        "number_of_employees": number_of_employees,
+        "number_of_tasks": number_of_tasks,
+        "urgent_tasks": urgent_tasks,
+        "outdated_tasks": outdated_tasks,
     }
 
     return render(request, "task_manager/index.html", context=context)
@@ -205,10 +214,10 @@ class EmployeeDeleteView(LoginRequiredMixin, generic.DeleteView):
 @login_required
 def toggle_assign_to_task(request, pk):
     employee = Employee.objects.get(id=request.user.id)
-    if (
-        Task.objects.get(id=pk) in employee.tasks.all()
-    ):
+    if Task.objects.get(id=pk) in employee.tasks.all():
         employee.tasks.remove(pk)
     else:
         employee.tasks.add(pk)
-    return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[pk]))
+    return HttpResponseRedirect(
+        reverse_lazy("task_manager:task-detail", args=[pk])
+    )
