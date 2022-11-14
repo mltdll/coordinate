@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Welcome to Coördinate!</h1>
+  <br>
+  <h4>Company summary:</h4>
+  <div class="card-deck mt-3">
+
+    <div class="card border-secondary mb-3">
+      <div class="card-header">Number of employees</div>
+      <div class="card-body text-secondary">
+        <p class="card-text">Current amount of employees working for the company is
+          <strong>{{ number_of_employees }}</strong>.</p>
+      </div>
+    </div>
+
+    <div class="card border-secondary mb-3">
+      <div class="card-header">Total number of tasks</div>
+      <div class="card-body text-secondary">
+        <p class="card-text">The company has <strong>{{ number_of_tasks }}</strong>
+          task{{ number_of_tasks|pluralize }} to complete.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-deck mt-3">
+
+    <div class="card border-warning mb-3">
+      <div class="card-header">Urgent tasks</div>
+      <div class="card-body text-secondary">
+        <p class="card-text">
+          There {{ urgent_tasks|pluralize:"is,are" }}
+          {% if urgent_tasks %}
+            <strong>{{ urgent_tasks }}</strong>
+          {% else %}
+            no
+          {% endif %}
+          urgent task{{ urgent_tasks|pluralize }} to complete.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="card border-{{ outdated_tasks|yesno:'danger,success' }} mb-3">
+      <div class="card-header">Outdated tasks</div>
+      <div class="card-body text-secondary">
+        <p class="card-text">
+          {% if outdated_tasks %}
+            <strong>{{ outdated_tasks }}</strong>
+            task{{ outdated_tasks|pluralize }} {{ outdated_tasks|pluralize:"is,are" }} outdated but still incomplete!
+          {% else %}
+            There are no outdated tasks.
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+  <div class="w-100 btn-group-vertical sidebar-nav">
+    <a href="{% url 'task_manager:employee-list' %}" class="btn btn-light"><i class="bi bi-file-person-fill float-left"></i>Employees</a>
+    <a href="{% url 'task_manager:task-list' %}" class="btn btn-light"><i class="bi bi-calendar-check-fill float-left"></i>Tasks</a>
+    <a href="{% url 'task_manager:task-type-list' %}" class="btn btn-light"><i class="bi bi-clipboard-data-fill float-left"></i>Task types</a>
+    <a href="{% url 'task_manager:position-list' %}" class="btn btn-light"><i class="bi bi-briefcase-fill float-left"></i>Positions</a>
+  </div>
+{% endif %}

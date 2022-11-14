@@ -1,0 +1,44 @@
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr>
+    <th scope="col">name</th>
+    <th scope="col">type</th>
+    <th scope="col">priority</th>
+    <th scope="col">deadline</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% if task_list %}
+    {% for task in task_list %}
+      <tr {% if task.is_completed %}class="table-success"{% endif %}>
+        <td><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
+        <td>
+          {{ task.task_type }}
+        </td>
+        <td>{{ task.get_priority_display }}</td>
+        <td>
+          {{ task.deadline.isoformat }}
+          <span class="float-right btn-group">
+              {% if task.is_completed %}
+                <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}"
+                   class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-x-square"></i>
+                </a>
+              {% else %}
+                <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}"
+                   class="btn btn-outline-success btn-sm">
+                  <i class="bi bi-check-square"></i>
+                </a>
+              {% endif %}
+            </span>
+        </td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="4" class="text-muted">No tasks found</td>
+    </tr>
+  {% endif %}
+  </tbody>
+
+</table>

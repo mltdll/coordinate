@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Employees
+    <a href="{% url 'task_manager:employee-create' %}" class="float-right btn btn-outline-primary">
+      <i class="bi bi-plus-square"></i> Create
+    </a>
+  </h1>
+
+  {% include "includes/search_form.html" %}
+
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">username</th>
+      <th scope="col">name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if employee_list %}
+      {% for employee in employee_list %}
+        <tr>
+          <td>{{ employee.id }}</td>
+          <td><a href="{% url 'task_manager:employee-detail' pk=employee.id %}">{{ employee.username }}</a></td>
+          <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="3" class="text-muted">No employees found</td>
+      </tr>
+    {% endif %}
+    </tbody>
+
+  </table>
+
+{% endblock %}

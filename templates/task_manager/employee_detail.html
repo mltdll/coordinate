@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>
+    {{ employee.username }}
+
+    <span class="float-right">
+    <a href="{% url 'task_manager:employee-update' pk=employee.id %}" class="btn btn-outline-info">
+      <i class="bi bi-briefcase"></i> Change position
+    </a>
+    <a href="{% url 'task_manager:employee-delete' pk=employee.id %}" class="btn btn-outline-danger">
+      <i class="bi bi-trash"></i> Delete
+    </a>
+  </span>
+  </h1>
+  <h3 class="text-muted">{{ employee.position }}</h3>
+
+  <p>
+    <br>
+    <span class="font-weight-bold">First name: </span>{{ employee.first_name }}
+    <br>
+    <span class="font-weight-bold">Last name: </span>{{ employee.last_name }}
+  </p>
+
+  {% if employee.tasks.all %}
+    <h3 class="mt-5">Tasks</h3>
+    {% include "includes/task-table.html" with task_list=employee.tasks.all %}
+  {% else %}
+    <p class="text-muted">This employee has no tasks</p>
+  {% endif %}
+
+{% endblock %}

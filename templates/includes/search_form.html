@@ -1,0 +1,20 @@
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+
+<form action="" method="get" class="mb-4 mt-4 w-100">
+
+  {% for field in search_form %}
+    <div class="input-group">
+      {{ field.errors }}
+      {{ field.label_tag }}
+      {{ field|add_class:"form-control" }}
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary">
+          <i class="bi bi-search"></i> Search
+        </button>
+      </div>
+    </div>
+
+  {% endfor %}
+
+</form>

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>
+    Positions
+    <a href="{% url 'task_manager:position-create' %}" class="float-right btn btn-outline-primary">
+      <i class="bi bi-plus-square"></i> Create
+    </a>
+  </h1>
+
+  {% include "includes/search_form.html" %}
+
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if position_list %}
+      {% for position in position_list %}
+        <tr>
+          <td>{{ position.id }}</td>
+          <td>
+            {{ position.name }}
+            <span class="float-right">
+              <a href="{% url 'task_manager:position-update' pk=position.id %}"
+                 class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <a href="{% url 'task_manager:position-delete' pk=position.id %}" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash"></i>
+              </a>
+            </span>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="2" class="text-muted">No positions found</td>
+      </tr>
+    {% endif %}
+    </tbody>
+
+  </table>
+
+{% endblock %}

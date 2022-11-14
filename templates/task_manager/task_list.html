@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>
+    Tasks
+    <a href="{% url 'task_manager:task-create' %}" class="float-right btn btn-outline-primary">
+      <i class="bi bi-plus-square"></i> Create
+    </a>
+  </h1>
+
+  {% include "includes/search_form.html" %}
+
+  {% include "includes/task-table.html" %}
+
+{% endblock %}
