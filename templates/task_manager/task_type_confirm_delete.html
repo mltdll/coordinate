@@ -8,7 +8,8 @@
   <p>Are you sure you want to delete this type?</p>
 
   {% if object.tasks.all %}
-    <p><strong>This will also delete {{ object.tasks.all.count }} task{{ object.tasks.all.count|pluralize }}!</strong></p>
+    <p><strong>This will also delete {{ object.tasks.all.count }} task{{ object.tasks.all.count|pluralize }}!</strong>
+    </p>
   {% endif %}
 
 {% endblock %}

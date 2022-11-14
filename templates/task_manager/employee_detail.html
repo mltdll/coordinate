@@ -2,10 +2,10 @@
 
 {% block content %}
 
- <h1>
-   {{ employee.username }}
+  <h1>
+    {{ employee.username }}
 
-  <span class="float-right">
+    <span class="float-right">
     <a href="{% url 'task_manager:employee-update' pk=employee.id %}" class="btn btn-outline-info">
       <i class="bi bi-briefcase"></i> Change position
     </a>
@@ -13,15 +13,15 @@
       <i class="bi bi-trash"></i> Delete
     </a>
   </span>
- </h1>
+  </h1>
   <h3 class="text-muted">{{ employee.position }}</h3>
-  
-    <p>
-      <br>
-      <span class="font-weight-bold">First name: </span>{{ employee.first_name }}
-      <br>
-      <span class="font-weight-bold">Last name: </span>{{ employee.last_name }}
-    </p>
+
+  <p>
+    <br>
+    <span class="font-weight-bold">First name: </span>{{ employee.first_name }}
+    <br>
+    <span class="font-weight-bold">Last name: </span>{{ employee.last_name }}
+  </p>
 
   {% if employee.tasks.all %}
     <h3>Tasks:</h3>
@@ -29,7 +29,8 @@
     {% for task in employee.tasks.all %}
       <hr>
       <h5><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task }}</a></h5>
-      {% if forloop.last %}<hr>{% endif %}
+      {% if forloop.last %}
+        <hr>{% endif %}
     {% endfor %}
 
   {% else %}
