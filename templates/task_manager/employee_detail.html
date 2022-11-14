@@ -24,17 +24,10 @@
   </p>
 
   {% if employee.tasks.all %}
-    <h3>Tasks:</h3>
-
-    {% for task in employee.tasks.all %}
-      <hr>
-      <h5><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task }}</a></h5>
-      {% if forloop.last %}
-        <hr>{% endif %}
-    {% endfor %}
-
+    <h3 class="mt-5">Tasks</h3>
+    {% include "includes/task-table.html" with task_list=employee.tasks.all %}
   {% else %}
-    <p class="text-muted">This employee has no tasks.</p>
+    <p class="text-muted">This employee has no tasks</p>
   {% endif %}
 
 {% endblock %}
