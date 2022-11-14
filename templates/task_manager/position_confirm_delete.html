@@ -16,7 +16,10 @@
     </form>
 
   {% else %}
-    <p class="alert-warning">Position can't be deleted as long as it has at least one user.</p>
+    <p class="mt-4 mb-4">
+      <span class="alert alert-warning">Position can't be deleted as long as it has at least one employee.
+      </span>
+    </p>
     <a href="{% url 'task_manager:index' %}" class="btn btn-outline-secondary">Go back</a>
 
   {% endif %}
