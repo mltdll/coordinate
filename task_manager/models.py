@@ -58,6 +58,9 @@ class Task(models.Model):
         settings.AUTH_USER_MODEL, related_name="tasks"
     )
 
+    class Meta:
+        ordering = ["is_completed", "deadline"]
+
     def toggle_completed(self):
         self.is_completed = not self.is_completed
         self.save()

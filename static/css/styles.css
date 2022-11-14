@@ -1,10 +1,15 @@
 .content {
     padding: 20px 30px;
-    width: 50%;
+    width: 55%;
     min-height: 100vh;
     background-color: white;
     border: lightgray solid;
     border-width: 0 1px;
+}
+
+.navbar-container {
+    width: 55%;
+    padding: 0;
 }
 
 .navbar-brand {
