@@ -60,6 +60,14 @@
     <p class="text-muted">This task has no assignees.</p>
   {% endif %}
 
-  <br>
+  {% if task.is_completed %}
+    <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}" class="btn btn-outline-danger">
+      <i class="bi bi-x-square"></i> Mark uncompleted
+    </a>
+  {% else %}
+    <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}" class="btn btn-outline-success">
+      <i class="bi bi-check-square"></i> Mark completed
+    </a>
+  {% endif %}
 
 {% endblock %}

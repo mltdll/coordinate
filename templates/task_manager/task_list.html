@@ -29,14 +29,14 @@
             {{ task.task_type }}
             <span class="float-right">
               {% if user in task.assignees.all %}
-                <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}"
+                <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}"
                    class="btn btn-outline-danger btn-sm">
-                  <i class="bi bi-calendar-minus"></i>
+                  <i class="bi bi-x-square"></i>
                 </a>
               {% else %}
-                <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}"
+                <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}"
                    class="btn btn-outline-success btn-sm">
-                  <i class="bi bi-calendar-check"></i>
+                  <i class="bi bi-check-square"></i>
                 </a>
               {% endif %}
 

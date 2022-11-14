@@ -221,3 +221,12 @@ def toggle_assign_to_task(request, pk):
     return HttpResponseRedirect(
         reverse_lazy("task_manager:task-detail", args=[pk])
     )
+
+
+def task_toggle_completed(request, pk):
+    task = Task.objects.get(pk=pk)
+    task.toggle_completed()
+
+    return HttpResponseRedirect(
+        reverse_lazy("task_manager:task-detail", args=[pk])
+    )

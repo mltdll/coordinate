@@ -20,7 +20,7 @@ from .views import (
     PositionCreateView,
     PositionUpdateView,
     PositionDeleteView,
-    toggle_assign_to_task,
+    toggle_assign_to_task, task_toggle_completed,
 )
 
 urlpatterns = [
@@ -78,6 +78,11 @@ urlpatterns = [
         "tasks/<int:pk>/toggle-assign/",
         toggle_assign_to_task,
         name="toggle-task-assign",
+    ),
+    path(
+        "tasks/<int:pk>/toggle-completed/",
+        task_toggle_completed,
+        name="toggle-task-completed",
     ),
     path("employees/", EmployeeListView.as_view(), name="employee-list"),
     path(
