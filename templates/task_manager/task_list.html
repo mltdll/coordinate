@@ -28,7 +28,7 @@
           <td>
             {{ task.task_type }}
             <span class="float-right">
-              {% if user in task.assignees.all %}
+              {% if task.is_completed %}
                 <a href="{% url 'task_manager:toggle-task-completed' pk=task.id %}"
                    class="btn btn-outline-danger btn-sm">
                   <i class="bi bi-x-square"></i>
