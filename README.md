@@ -3,6 +3,9 @@
 A simple app to help coordinate the work of employees in your company.
 
 The project is deployed on render; [check it out](https://coordinate.onrender.com/). To access the website, use these credentials:
+
+*Note that the hosting can be slow to respond initially*
+
 ```
 login: test.subject
 password: Lqlc3iUnfS2uf-K9olBi6g
