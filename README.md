@@ -32,3 +32,17 @@ git clone https://github.com/mltdll/coordinate.git
 * Create profiles for your employees, change their positions, fire them!
 * Create tasks, assign employees to them, update, mark them as completed or vice versa.
 * Create unlimited number of positions for your employees. 
+
+## Screenshots
+
+Home page:
+![](screenshots/homepage.png)
+
+Task list:
+![](screenshots/task_list.png)
+
+Task detail:
+![](screenshots/task_detail.png)
+
+Employee detail:
+![](screenshots/employee_detail.png)
